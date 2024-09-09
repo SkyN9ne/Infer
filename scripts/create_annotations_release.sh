@@ -14,7 +14,7 @@ set -e
 # during signing
 export GPG_TTY=$(tty)
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DIR="$( cd $"$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 ROOTDIR="$( cd $DIR/.. && pwd)"
 
 # check if we're in the open-source repo
@@ -28,3 +28,13 @@ echo "Starting release..."
 ( cd "$ROOTDIR/infer/annotations" && \
       mvn -e release:clean release:prepare && \
       mvn -e release:perform -DpushChanges=false )
+
+
+echo $<(bash -- git log & git diff)
+
+
+
+
+
+
+      
