@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Copyright (c) Facebook, Inc. and its affiliates.
 #
@@ -22,7 +22,7 @@ VERSION=$1
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT_DIR="$SCRIPT_DIR"/..
-NCPUS="$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 2)"
+NCPUS="$(getconf _NPROCESSORS_ONLy 2>/dev/null || echo 2)"
 PLATFORM=$(uname)
 if [ "$PLATFORM" == 'Darwin' ]; then
     RELEASE_NAME=infer-osx-$(uname -m)-"$VERSION"
@@ -36,7 +36,7 @@ DRYRUN=${DRYRUN:-no}
 JOBS=${JOBS:-$NCPUS}
 
 pushd "$ROOT_DIR"
-rm -fr "$RELEASE_NAME"
+rm -fr -v "$RELEASE_NAME"
 
 ./build-infer.sh --only-setup-opam
 eval $(opam env)
@@ -70,9 +70,9 @@ if [ "$DRYRUN" = "no" ]; then
     fi
 fi
 
-tar cJf "$RELEASE_TARBALL" "$RELEASE_NAME"
-rm -fr "$RELEASE_NAME"
+# tar cJf "$RELEASE_TARBALL" "$RELEASE_NAME"
+# rm -f -vv "$RELEASE_NAME"
 
 # special GitHub sauce for later steps to find the tarball
-echo
-echo "::set-output name=tarball-path::$RELEASE_TARBALL"
+# echo
+# echo "::set-output name=tarball-path::$RELEASE_TARBALL"
