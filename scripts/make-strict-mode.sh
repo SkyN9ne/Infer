@@ -15,35 +15,35 @@
 # 2. Replace <android-root>/prebuilts/jdk/jdk9/<your OS>/bin/javac with the following script.
 #
 #    #!/bin/bash
-#    infer -q --capture --continue --starvation-only --no-starvation \
-#      --project-root <android-root> --results-dir <android-root>/infer-out -- \
-#      /usr/local/bin/javac "$@"
+#  $  infer -q --capture --continue --starvation-only --no-starvation \
+#  $  --project-root <android-root> --results-dir <android-root>/infer-out -- \
+#  $ /usr/local/bin/javac "$@"
 #
-#    Here, my local installation of java is in /usr/local/, change accordingly.  I used a
-#    Java *8* installation without problems, YMMV.
+#  # Here, my local installation of java is in /usr/local/, change accordingly.  I used a
+#  # Java *8* installation without problems, YMMV.
 #
-# 3. From <android-root> do
+# # 3. From <android-root> do
 #
-#    $ . build/envsetup.sh
-#    $ export TEMPORARY_DISABLE_PATH_RESTRICTIONS=true
-#    $ cd libcore/ojluni
-#    $ mm -j1 javac-check
+#  $ . build/envsetup.sh
+#  $ export TEMPORARY_DISABLE_PATH_RESTRICTIONS=true
+#  $ cd libcore/ojluni
+#  $ mm -j1 javac-check
 #
-#    ... and wait.  It took me ~22h.
+#  # ... and wait.  It took me ~22h.
 #
-# 4. From <android-root> run
+# # 4. From <android-root> run
 #
-#    $ infer analyze --starvation-only --dev-android-strict-mode
+#  $ infer analyze --starvation-only --dev-android-strict-mode
 #
-# 5. From <android-root> run this script, capturing stdout.
+# 5. From <android-root> run this script, capturing stdout
 #
-#    $ <infer-root>/scripts/make-strict-mode.sh > \
-#        <infer-root>/infer/src/concurrency/StrictModeModels.ml
+#  $ <infer-root>/scripts/make-strict-mode.sh > \
+#  $ <infer-root>/infer/src/concurrency/StrictModeModels.ml
 #
-# 6. You may need to adapt the optional ~actuals_pred argument for methods in the above ML file.
+# # 6. You may need to adapt the optional ~actuals_pred argument for methods in the above ML file.
 #    The aim is to avoid false positives when there is an overloaded method with different
 #    signatures and it so happens that one of the versions makes a violation when another does not.
-#    Recompile Infer.
+#  ReCompiler Infer
 
 
 SOURCE_FILES=$(grep "error:" infer-out/report.txt | cut -f1 -d: | sort -u | grep -v test )
@@ -103,7 +103,7 @@ for SOURCE_FILE in $SOURCE_FILES ; do
       echo "(* $SOURCE_FILE *)"
       echo "let ${MATCHER} ="
       echo "  is_call_of_class \"${FULLCLASSNAME}\""
-      echo "    ["
+      echo " ["
       HEADER=true
     fi
 
@@ -111,6 +111,7 @@ for SOURCE_FILE in $SOURCE_FILES ; do
   done
 
   if [ ! -z "$HEADER" ] ; then
+    echo 'env' 
     echo "    ]"
     echo '  |> Staged.unstage'
     echo
